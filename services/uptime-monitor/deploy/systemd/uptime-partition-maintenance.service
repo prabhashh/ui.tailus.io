@@ -1,7 +1,0 @@
-[Unit]
-Description=Uptime Monitor - Postgres partition maintenance (fallback for when pg_cron isn't available)
-
-[Service]
-Type=oneshot
-EnvironmentFile=/etc/uptime-monitor/uptime-monitor.env
-ExecStart=/usr/bin/psql "${UPTIME_POSTGRES_DSN}" -c "SELECT uptime_create_daily_partitions(); SELECT uptime_rollup_hourly(); SELECT uptime_drop_old_partitions(7);"
