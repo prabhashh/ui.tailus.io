@@ -1,0 +1,29 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: uptime-scheduler
+    static_configs:
+      - targets: ["scheduler:9090"]
+        labels: { service: scheduler }
+
+  - job_name: uptime-prober
+    static_configs:
+      - targets: ["prober-default:9090"]
+        labels: { service: prober, region: default }
+      # Add one target line per regional prober fleet in production, e.g.:
+      # - targets: ["prober-us-east-1:9090", "prober-us-east-2:9090"]
+      #   labels: { service: prober, region: us-east }
+
+  - job_name: uptime-resultprocessor
+    static_configs:
+      - targets: ["resultprocessor:9090"]
+        labels: { service: resultprocessor }
+
+  - job_name: uptime-api
+    static_configs:
+      # api serves /metrics on its main HTTP port (UPTIME_API_ADDR), not the
+      # dedicated metrics port the other services use.
+      - targets: ["api:8080"]
+        labels: { service: api }
